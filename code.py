@@ -157,20 +157,21 @@ send_message(0, 1, 1, "Hello")
 send_message(1, 2, 2, "World")
 send_message(2, 0, 0, "Priority")
 send_message(0, 1, 1, "Queue")
-send_message(1, 2, 2, "Test")
-send_message(2, 0, 0, "Message")
 
 # User Input to send messages
-while True:
-    sender_id = int(input("Enter sender ID: "))
-    receiver_id = int(input("Enter receiver ID: "))
-    priority = int(input("Enter priority: "))
-    message = input("Enter message: ")
-    send_message(sender_id, receiver_id, priority, message)
+user_input_choice = input("Do you want to add more messages to thread? (y/n): ")
+if user_input_choice.lower() == "y":
+    while True:
+        sender_id = int(input("Enter sender ID: "))
+        receiver_id = int(input("Enter receiver ID: "))
+        priority = int(input("Enter priority: "))
+        message = input("Enter message: ")
+        send_message(sender_id, receiver_id, priority, message)
 
-    choice = input("Do you want to send more messages? (y/n): ")
-    if choice.lower() != "y":
-        break
+        choice = input("Do you want to send more messages? (y/n): ")
+        if choice.lower() != "y":
+            break
+
 
 # Option to use peek method
 peek_choice = input("Do you want to use the peek method? (y/n): ")
