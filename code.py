@@ -70,6 +70,7 @@ class ThreadPool:
         """
         self.task_queue = queue.Queue()
         self.threads = [threading.Thread(target=self._worker) for _ in range(num_threads)]
+        self.lock = threading.Lock()
 
     def start(self) -> None:
         """
@@ -85,7 +86,9 @@ class ThreadPool:
         Args:
             task: The task to be executed.
         """
-        self.task_queue.put(task)
+        with self.lock:
+            self.task_queue.put(task)
+            self.task_queue.task_done()
 
     def _worker(self) -> None:
         """
@@ -103,10 +106,11 @@ class ThreadPool:
         """
         Stops the thread pool by adding None tasks to the task queue for each worker thread and joining all the worker threads.
         """
-        for _ in self.threads:
-            self.task_queue.put(None)
-        for thread in self.threads:
-            thread.join()
+        with self.lock:
+            for _ in self.threads:
+                self.task_queue.put(None)
+            for thread in self.threads:
+                thread.join()
 
 
 def send_message(sender: int, receiver: int, priority: int, content: Any) -> None:
@@ -126,7 +130,8 @@ def send_message(sender: int, receiver: int, priority: int, content: Any) -> Non
         None
     """
     print(f"Thread-{sender} sending message to Thread-{receiver} with priority {priority}: {content}")
-    message_queue[receiver].enqueue((priority, content))
+    with message_queue_lock:
+        message_queue[receiver].enqueue((priority, content))
 
 
 def simple_action(message):
@@ -142,6 +147,7 @@ def receiving_thread(thread_id):
 # Initialize priority message queues for each thread
 num_threads = 3
 message_queue = [PriorityMessageQueue() for _ in range(num_threads)]
+message_queue_lock = threading.Lock()
 
 # Initialize thread pool
 thread_pool = ThreadPool(num_threads=2)
@@ -172,25 +178,25 @@ if user_input_choice.lower() == "y":
         if choice.lower() != "y":
             break
 
+# Optional functions to check the functionality of the priority message queue.
+# # Option to use peek method
+# peek_choice = input("Do you want to use the peek method? (y/n): ")
+# if peek_choice.lower() == "y":
+#     thread_id = int(input("Enter the thread ID to peek: "))
+#     message = message_queue[thread_id].peek()
+#     if message is not None:
+#         print(f"Peeked message for Thread-{thread_id}: {message}")
+#     else:
+#         print(f"No message in the queue for Thread-{thread_id}")
 
-# Option to use peek method
-peek_choice = input("Do you want to use the peek method? (y/n): ")
-if peek_choice.lower() == "y":
-    thread_id = int(input("Enter the thread ID to peek: "))
-    message = message_queue[thread_id].peek()
-    if message is not None:
-        print(f"Peeked message for Thread-{thread_id}: {message}")
-    else:
-        print(f"No message in the queue for Thread-{thread_id}")
-
-# Option to view current stack of messages for a single thread
-view_stack_choice = input("Do you want to view the current stack of messages for a single thread? (y/n): ")
-if view_stack_choice.lower() == "y":
-    thread_id = int(input("Enter the thread ID to view the stack of messages: "))
-    messages = message_queue[thread_id].get_all_messages()
-    print(f"Current stack of messages for Thread-{thread_id}:")
-    for priority, content in messages:
-        print(f"Priority: {priority}, Content: {content}")
+# # Option to view current stack of messages for a single thread
+# view_stack_choice = input("Do you want to view the current stack of messages for a single thread? (y/n): ")
+# if view_stack_choice.lower() == "y":
+#     thread_id = int(input("Enter the thread ID to view the stack of messages: "))
+#     messages = message_queue[thread_id].get_all_messages()
+#     print(f"Current stack of messages for Thread-{thread_id}:")
+#     for priority, content in messages:
+#         print(f"Priority: {priority}, Content: {content}")
 
 # Wait for threads to finish
 for thread in receiving_threads:
