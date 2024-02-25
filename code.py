@@ -48,6 +48,13 @@ class PriorityMessageQueue:
         with self.lock:
             return not bool(self.heap)
 
+    def get_all_messages(self) -> list[Tuple[int, Any]]:
+        """
+        Returns a list of all messages in the queue.
+        """
+        with self.lock:
+            return self.heap.copy()
+
 
 class ThreadPool:
     """
@@ -145,6 +152,14 @@ receiving_threads = [threading.Thread(target=receiving_thread, args=(i,)) for i 
 for thread in receiving_threads:
     thread.start()
 
+# Test this implementation
+send_message(0, 1, 1, "Hello")
+send_message(1, 2, 2, "World")
+send_message(2, 0, 0, "Priority")
+send_message(0, 1, 1, "Queue")
+send_message(1, 2, 2, "Test")
+send_message(2, 0, 0, "Message")
+
 # User Input to send messages
 while True:
     sender_id = int(input("Enter sender ID: "))
@@ -156,6 +171,25 @@ while True:
     choice = input("Do you want to send more messages? (y/n): ")
     if choice.lower() != "y":
         break
+
+# Option to use peek method
+peek_choice = input("Do you want to use the peek method? (y/n): ")
+if peek_choice.lower() == "y":
+    thread_id = int(input("Enter the thread ID to peek: "))
+    message = message_queue[thread_id].peek()
+    if message is not None:
+        print(f"Peeked message for Thread-{thread_id}: {message}")
+    else:
+        print(f"No message in the queue for Thread-{thread_id}")
+
+# Option to view current stack of messages for a single thread
+view_stack_choice = input("Do you want to view the current stack of messages for a single thread? (y/n): ")
+if view_stack_choice.lower() == "y":
+    thread_id = int(input("Enter the thread ID to view the stack of messages: "))
+    messages = message_queue[thread_id].get_all_messages()
+    print(f"Current stack of messages for Thread-{thread_id}:")
+    for priority, content in messages:
+        print(f"Priority: {priority}, Content: {content}")
 
 # Wait for threads to finish
 for thread in receiving_threads:
