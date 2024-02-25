@@ -43,3 +43,9 @@ PLease access the doc [here](https://docs.google.com/document/d/1UjUhsqujDPqQuT2
 [Watch Video Explanation](insert_youtube_video_url_here)
 
 In this video, I've provided a detailed explanation of the code, its components, and how to run and test the multi-threaded priority message queue system. If you have any questions or encounter issues, refer to the video for a step-by-step guide.
+
+## Note
+Help of codium, github-copilot, chatgpt was taken to enhance, document and figure best actions and functionalities to program.
+
+## Author
+[@tknishh](https://github.com/tknishh)
