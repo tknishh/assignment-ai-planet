@@ -17,13 +17,13 @@ PLease access the doc [here](https://docs.google.com/document/d/1UjUhsqujDPqQuT2
 
 1. **Clone the Repository:**
    ```bash
-   git clone <repository_url>
+   git clone https://github.com/tknishh/assignment-ai-planet
    cd <repository_directory>
    ```
 
 2. **Run the Code:**
    ```bash
-   python <filename>.py
+   python code.py
    ```
 
 3. **Follow On-screen Instructions:**
