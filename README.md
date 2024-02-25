@@ -40,7 +40,7 @@ PLease access the doc [here](https://docs.google.com/document/d/1UjUhsqujDPqQuT2
 
 ## Embedded Video Explanation
 
-[Watch Video Explanation](insert_youtube_video_url_here)
+[Watch Video Explanation](https://www.loom.com/share/ce74f48015cd4b828bce0843e6629570?sid=1a63cfa4-2f29-4d59-a887-8f2de05f63b1)
 
 In this video, I've provided a detailed explanation of the code, its components, and how to run and test the multi-threaded priority message queue system. If you have any questions or encounter issues, refer to the video for a step-by-step guide.
 
