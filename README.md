@@ -11,7 +11,7 @@ This project implements a multi-threaded priority message queue system in Python
 
 ## Detailed documention on implementation
 
-PLease access the doc [here](https://docs.google.com/document/d/1UjUhsqujDPqQuT2Wb4NEYX2C-TESM4VYxFDL7noD_gM/edit?usp=sharing) or check [documentation.md]()
+PLease access the doc [here](https://docs.google.com/document/d/1UjUhsqujDPqQuT2Wb4NEYX2C-TESM4VYxFDL7noD_gM/edit?usp=sharing) or check [documentation.md](https://github.com/tknishh/assignment-ai-planet/blob/master/documentation/documentation.md)
 
 ## Steps to Run
 
