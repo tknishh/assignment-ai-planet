@@ -6,7 +6,7 @@ import logging
 import time
 
 # Create loggers for both producer and consumer threads
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 producer_logger = logging.getLogger("ProducerThread")
 consumer_logger = logging.getLogger("ConsumerThread")
 
@@ -171,22 +171,22 @@ for thread in receiving_threads:
     thread.start()
 
 # Test this implementation
-send_message(0, 1, 1, "Hello")
-send_message(1, 2, 2, "World")
-send_message(2, 0, 0, "Priority")
-send_message(0, 1, 1, "Queue")
+# send_message(0, 1, 1, "Hello")
+# send_message(1, 2, 2, "World")
+# send_message(2, 0, 0, "Priority")
+# send_message(0, 1, 0, "Queue")
 
 # User Input to send messages
-# while True:
-#     sender_id = int(input("Enter sender ID: "))
-#     receiver_id = int(input("Enter receiver ID: "))
-#     priority = int(input("Enter priority: "))
-#     message = input("Enter message: ")
-#     send_message(sender_id, receiver_id, priority, message)
+while True:
+    sender_id = int(input("Enter sender ID: "))
+    receiver_id = int(input("Enter receiver ID: "))
+    priority = int(input("Enter priority: "))
+    message = input("Enter message: ")
+    send_message(sender_id, receiver_id, priority, message)
 
-#     choice = input("Do you want to send more messages? (y/n): ")
-#     if choice.lower() != "y":
-#         break
+    choice = input("Do you want to send more messages? (y/n): ")
+    if choice.lower() != "y":
+        break
 
 # Wait for threads to finish
 for thread in receiving_threads:
