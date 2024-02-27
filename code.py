@@ -162,7 +162,7 @@ for thread in receiving_threads:
 send_message(0, 1, 1, "Hello")
 send_message(1, 2, 2, "World")
 send_message(2, 0, 0, "Priority")
-send_message(0, 1, 1, "Queue")
+send_message(0, 1, 0, "Queue")
 
 # User Input to send messages
 user_input_choice = input("Do you want to add more messages to thread? (y/n): ")
