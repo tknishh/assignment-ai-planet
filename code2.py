@@ -161,6 +161,13 @@ def receiving_thread(thread_id):
                 thread_pool.stop()  # Terminate the program
                 break
 
+# User Input to send messages
+def user_input():
+    sender_id = int(input("Enter sender ID: "))
+    receiver_id = int(input("Enter receiver ID: "))
+    priority = int(input("Enter priority: "))
+    message = input("Enter message: ")
+    send_message(sender_id, receiver_id, priority, message)
 
 # Initialize priority message queues for each thread
 num_threads = 3  # int(input("Enter number of threads: "))
@@ -185,14 +192,6 @@ time.sleep(3)
 send_message(2, 0, 0, "Priority")
 time.sleep(4)
 send_message(0, 1, 0, "Queue")
-
-# User Input to send messages
-# def user_input():
-#     sender_id = int(input("Enter sender ID: "))
-#     receiver_id = int(input("Enter receiver ID: "))
-#     priority = int(input("Enter priority: "))
-#     message = input("Enter message: ")
-#     send_message(sender_id, receiver_id, priority, message)
 
 # time.sleep(1)
 # choice = input("Do you want to send more messages? (y/n): ")
