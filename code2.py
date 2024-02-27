@@ -143,10 +143,12 @@ def send_message(sender: int, receiver: int, priority: int, content: Any) -> Non
 
 
 def simple_action(message):
-    consumer_logger.debug(f"Performing simple action: {message}")
+    print(f"Performing simple action: {message}")
 
 
 def receiving_thread(thread_id):
+    # counter to see how many times this function is called and when.
+    consumer_logger.debug(f"Receiving thread {thread_id} started")
     while True:
         if not message_queue[thread_id].is_empty():
             message = message_queue[thread_id].dequeue()
@@ -170,23 +172,27 @@ receiving_threads = [threading.Thread(target=receiving_thread, args=(i,)) for i 
 for thread in receiving_threads:
     thread.start()
 
-# Test this implementation
-# send_message(0, 1, 1, "Hello")
-# send_message(1, 2, 2, "World")
-# send_message(2, 0, 0, "Priority")
-# send_message(0, 1, 0, "Queue")
-
 # User Input to send messages
-while True:
+def user_input():
     sender_id = int(input("Enter sender ID: "))
     receiver_id = int(input("Enter receiver ID: "))
     priority = int(input("Enter priority: "))
     message = input("Enter message: ")
     send_message(sender_id, receiver_id, priority, message)
 
-    choice = input("Do you want to send more messages? (y/n): ")
-    if choice.lower() != "y":
-        break
+# Test this implementation
+# send_message(0, 1, 1, "Hello")
+# send_message(1, 2, 2, "World")
+# send_message(2, 0, 0, "Priority")
+# send_message(0, 1, 0, "Queue")
+choice = input("Do you want to start sending message? (y/n): ")
+if choice.lower() == "y":
+    while True:
+        user_input()
+        time.sleep(1)
+        choice = input("Do you want to send more messages? (y/n): ")
+        if choice.lower() != "y":
+            break
 
 # Wait for threads to finish
 for thread in receiving_threads:
