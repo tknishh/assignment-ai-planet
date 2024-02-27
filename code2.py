@@ -147,18 +147,23 @@ def simple_action(message):
 
 
 def receiving_thread(thread_id):
+    start_time = time.time()
     while True:
         consumer_logger.debug(f"Thread-{thread_id} checking for messages")
         if not message_queue[thread_id].is_empty():
             message = message_queue[thread_id].dequeue()
             thread_pool.submit_task(lambda: simple_action(message))
+            start_time = time.time()  # Reset the start time
         else:
             # Sleep if the queue is empty
             time.sleep(3)
+            if time.time() - start_time > 10:
+                thread_pool.stop()  # Terminate the program
+                break
 
 
 # Initialize priority message queues for each thread
-num_threads = int(input("Enter number of threads: "))
+num_threads = 3  # int(input("Enter number of threads: "))
 message_queue = [PriorityMessageQueue() for _ in range(num_threads)]
 message_queue_lock = threading.Lock()
 
@@ -172,28 +177,32 @@ for thread in receiving_threads:
     thread.start()
 
 # Test this implementation
+time.sleep(1)
 send_message(0, 1, 1, "Hello")
+time.sleep(2)
 send_message(1, 2, 2, "World")
+time.sleep(3)
 send_message(2, 0, 0, "Priority")
+time.sleep(4)
 send_message(0, 1, 0, "Queue")
 
 # User Input to send messages
-def user_input():
-    sender_id = int(input("Enter sender ID: "))
-    receiver_id = int(input("Enter receiver ID: "))
-    priority = int(input("Enter priority: "))
-    message = input("Enter message: ")
-    send_message(sender_id, receiver_id, priority, message)
+# def user_input():
+#     sender_id = int(input("Enter sender ID: "))
+#     receiver_id = int(input("Enter receiver ID: "))
+#     priority = int(input("Enter priority: "))
+#     message = input("Enter message: ")
+#     send_message(sender_id, receiver_id, priority, message)
 
-time.sleep(1)
-choice = input("Do you want to send more messages? (y/n): ")
-if choice.lower() == "y":
-    while True:
-        user_input()
-        time.sleep(1)
-        choice = input("Do you want to send more messages? (y/n): ")
-        if choice.lower() != "y":
-            break
+# time.sleep(1)
+# choice = input("Do you want to send more messages? (y/n): ")
+# if choice.lower() == "y":
+#     while True:
+#         user_input()
+#         time.sleep(1)
+#         choice = input("Do you want to send more messages? (y/n): ")
+#         if choice.lower() != "y":
+#             break
 
 # Wait for threads to finish
 for thread in receiving_threads:
