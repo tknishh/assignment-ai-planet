@@ -142,8 +142,8 @@ def send_message(sender: int, receiver: int, priority: int, content: Any) -> Non
         message_queue[receiver].enqueue((priority, content))
 
 
-def simple_action(message):
-    print(f"Performing simple action: {message}")
+def simple_action(message, thread_id):
+    print(f"Performing simple action: {message} + thread_id: {thread_id}")
 
 
 def receiving_thread(thread_id):
@@ -152,7 +152,7 @@ def receiving_thread(thread_id):
         consumer_logger.debug(f"Thread-{thread_id} checking for messages")
         if not message_queue[thread_id].is_empty():
             message = message_queue[thread_id].dequeue()
-            thread_pool.submit_task(lambda: simple_action(message))
+            thread_pool.submit_task(lambda: simple_action(message, thread_id))
             start_time = time.time()  # Reset the start time
         else:
             # Sleep if the queue is empty
@@ -170,7 +170,7 @@ def user_input():
     send_message(sender_id, receiver_id, priority, message)
 
 # Initialize priority message queues for each thread
-num_threads = 3  # int(input("Enter number of threads: "))
+num_threads = int(input("Enter number of threads: "))
 message_queue = [PriorityMessageQueue() for _ in range(num_threads)]
 message_queue_lock = threading.Lock()
 
@@ -187,7 +187,9 @@ for thread in receiving_threads:
 time.sleep(1)
 send_message(0, 1, 1, "Hello")
 time.sleep(2)
-send_message(1, 2, 2, "World")
+send_message(1, 2, 2, "World1")
+send_message(1, 1, 2, "World2")
+send_message(1, 2, 2, "World3")
 time.sleep(3)
 send_message(2, 0, 0, "Priority")
 time.sleep(4)
